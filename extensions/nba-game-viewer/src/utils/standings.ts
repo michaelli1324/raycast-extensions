@@ -1,12 +1,12 @@
 import axios from "axios";
-import { StandingsResponse } from "../types/standings.types";
+import { StandingsResponse, Stat } from "../types/standings.types";
 
 type GetStandingsArgs = {
   year: string;
   group: string;
 };
 
-const getStandings = async ({ year, group }: GetStandingsArgs): Promise<StandingsResponse> => {
+export const getStandings = async ({ year, group }: GetStandingsArgs): Promise<StandingsResponse> => {
   const groupId = group === "league" ? 1 : group === "conference" ? 2 : 3;
   const baseUrl = `https://site.web.api.espn.com/apis/v2/sports/basketball/nba/standings`;
   const params = {
@@ -14,7 +14,7 @@ const getStandings = async ({ year, group }: GetStandingsArgs): Promise<Standing
     lang: "en",
     contentorigin: "espn",
     season: year,
-    type: 1,
+    type: 0,
     level: groupId,
   };
   const res = await axios.get(baseUrl, {
@@ -23,4 +23,6 @@ const getStandings = async ({ year, group }: GetStandingsArgs): Promise<Standing
   return res.data;
 };
 
-export default getStandings;
+export const getStatByName = (stats: Stat[], name: string) => {
+  return stats.find((stat) => stat.name === name);
+};

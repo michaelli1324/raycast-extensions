@@ -1,5 +1,9 @@
 # NBA Game Viewer Changelog
 
+## [New Feature] - 2023-03-13
+
+- View additional details about an NBA teams's current season
+
 ## [Fix] - 2023-03-12
 
 - Fix data (wins, losses, seed) in "View Standings" command. More robustly find stats by name instead of index.

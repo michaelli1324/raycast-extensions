@@ -3,12 +3,17 @@ import useStandings from "../hooks/useStandings";
 import TeamComponent from "../components/Team";
 import { useState } from "react";
 import { Conference } from "../types/standings.types";
+import { getStatByName } from "../utils/standings";
 
 const Standings = () => {
   const { data, isLoading } = useStandings();
+  const [isShowingDetail, setIsShowingDetail] = useState<boolean>(false);
   const [conference, setConference] = useState<string>(Conference.Eastern);
 
   const conferenceData = conference === Conference.Eastern ? data?.easternStandings : data?.westernStandings;
+  const sortedConferenceData = conferenceData?.sort(
+    (a, b) => (getStatByName(a.stats, "playoffSeed")?.value || 0) - (getStatByName(b.stats, "playoffSeed")?.value || 0)
+  );
 
   return (
     <List
@@ -24,12 +29,18 @@ const Standings = () => {
           <List.Dropdown.Item value={Conference.Western} title="Western" />
         </List.Dropdown>
       }
+      isShowingDetail={isShowingDetail}
     >
-      <List.Section title={`${conference} Conference`}>
-        {conferenceData?.map((team) => {
-          return <TeamComponent key={team.id} team={team} />;
-        })}
-      </List.Section>
+      {sortedConferenceData?.map((teamStats) => {
+        return (
+          <TeamComponent
+            key={teamStats.team.id}
+            teamStats={teamStats}
+            showDetail={isShowingDetail}
+            onChangeDetail={(detail) => setIsShowingDetail(detail)}
+          />
+        );
+      })}
     </List>
   );
 };

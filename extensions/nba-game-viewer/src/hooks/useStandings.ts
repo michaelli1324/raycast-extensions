@@ -1,23 +1,7 @@
-import getStandings from "../utils/getStandings";
+import { getStandings } from "../utils/standings";
 import { useCallback } from "react";
-import { Conference, ConferenceStanding, Team } from "../types/standings.types";
+import { Conference } from "../types/standings.types";
 import { useCachedPromise } from "@raycast/utils";
-
-const getConferenceStandings = (conferenceStanding: ConferenceStanding): Team[] =>
-  conferenceStanding.standings.entries
-    .map((data) => ({
-      id: data.team.id,
-      name: data.team.displayName,
-      logo: data.team.logos[0].href,
-      link: data.team.links[0].href,
-      seed: data.stats?.find((stat) => stat.name === "playoffSeed")?.value,
-      wins: data.stats?.find((stat) => stat.name === "wins")?.value,
-      losses: data.stats?.find((stat) => stat.name === "losses")?.value,
-      streak: data.stats?.find((stat) => stat.name === "streak")?.displayValue,
-    }))
-    .sort((a: Team, b: Team) => {
-      return (a?.seed || 0) - (b?.seed || 0);
-    });
 
 const useStandings = () => {
   const fetchTeamStandings = useCallback(async () => {
@@ -32,8 +16,8 @@ const useStandings = () => {
 
     if (!easternConference || !westernConference) throw new Error("Could not find conference standings");
 
-    const easternStandings = getConferenceStandings(easternConference);
-    const westernStandings = getConferenceStandings(westernConference);
+    const easternStandings = easternConference.standings.entries;
+    const westernStandings = westernConference.standings.entries;
 
     return { easternStandings, westernStandings };
   }, []);

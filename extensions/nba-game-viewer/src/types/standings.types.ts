@@ -9,11 +9,11 @@ export type ConferenceStanding = {
   abbreviation: string;
   standings: {
     name: string;
-    entries: Array<TeamStanding>;
+    entries: Array<TeamStats>;
   };
 };
 
-export type TeamStanding = {
+export type TeamStats = {
   team: {
     id: number;
     location: string;
@@ -33,16 +33,7 @@ export type Stat = {
   description: string;
   abbreviation: string;
   displayValue: string;
-};
-
-export type Team = {
-  id: number;
-  name: string;
-  logo: string;
-  link: string;
-  seed?: number;
-  wins?: number;
-  losses?: number;
+  shortDisplayName: string;
 };
 
 export const Conference = {
